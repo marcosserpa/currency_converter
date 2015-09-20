@@ -1,5 +1,4 @@
 require "currency/version"
-require 'byebug'
 
 module Currency
 
