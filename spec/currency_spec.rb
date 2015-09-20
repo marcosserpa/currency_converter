@@ -13,7 +13,7 @@ describe Currency do
 
   describe '#convert_to' do
     Currency::Money.conversion_rates('BRL', { 'USD' => 3.88 })
-    let (:money) { Currency::Money.new(10, 'BRL') }
+    let(:money) { Currency::Money.new(10, 'BRL') }
 
     context "when currency is defined" do
       it { expect(money.convert_to('USD')).to eq(38.8) }
@@ -47,7 +47,7 @@ describe Currency do
   # arithmetic and logic operations override
   describe '#+' do
     Currency::Money.conversion_rates('BRL')
-    let (:money) { Currency::Money.new(50, 'BRL') }
+    let(:money) { Currency::Money.new(50, 'BRL') }
 
     context "when passed a Money object" do
       tip = Currency::Money.new(10, 'BRL')
@@ -62,7 +62,7 @@ describe Currency do
 
   describe '#-' do
     Currency::Money.conversion_rates('BRL')
-    let (:money) { Currency::Money.new(50, 'BRL') }
+    let(:money) { Currency::Money.new(50, 'BRL') }
 
     context "when passed a Money object" do
       tip = Currency::Money.new(10, 'BRL')
@@ -77,7 +77,7 @@ describe Currency do
 
   describe '#*' do
     Currency::Money.conversion_rates('BRL')
-    let (:money) { Currency::Money.new(50, 'BRL') }
+    let(:money) { Currency::Money.new(50, 'BRL') }
 
     context "when passed a Money object" do
       tip = Currency::Money.new(10, 'BRL')
@@ -92,7 +92,7 @@ describe Currency do
 
   describe '#/' do
     Currency::Money.conversion_rates('BRL')
-    let (:money) { Currency::Money.new(50, 'BRL') }
+    let(:money) { Currency::Money.new(50, 'BRL') }
 
     context "when passed a Money object" do
       tip = Currency::Money.new(10, 'BRL')
@@ -104,4 +104,57 @@ describe Currency do
       it {  expect(money / 20).to eq("2.5 BRL") }
     end
   end
+
+  describe '#>' do
+    let(:ten) { Currency::Money.new(10, 'BRL') }
+    let(:twenty) { Currency::Money.new(20, 'BRL') }
+
+    context "when first is major than second" do
+      it { expect(twenty > ten).to eq(true) }
+    end
+
+    context "when second is major than first" do
+      it { expect(ten > twenty).to eq(false) }
+    end
+  end
+
+  describe '#<' do
+    let(:ten) { Currency::Money.new(10, 'BRL') }
+    let(:twenty) { Currency::Money.new(20, 'BRL') }
+
+    context "when first is minor than second" do
+      it { expect(ten < twenty).to eq(true) }
+    end
+
+    context "when second is minor than first" do
+      it { expect(twenty < ten).to eq(false) }
+    end
+  end
+
+  describe '#==' do
+    let(:money_1) { Currency::Money.new(10, 'BRL') }
+
+    context "when both have same amount and currency" do
+      money_2 = Currency::Money.new(10, 'BRL')
+
+      it { expect(money_1 == money_2).to eq(true) }
+    end
+
+    context "when at least one is different" do
+      money_2 = Currency::Money.new(20, 'BRL')
+
+      it { expect(money_1 == money_2).to eq(false) }
+
+      money_3 = Currency::Money.new(10, 'EUR')
+
+      it { expect(money_1 == money_3).to eq(false) }
+    end
+
+    context "when amount and currency are different" do
+      money_4 = Currency::Money.new(20, 'JPY')
+
+      it { expect(money_1 == money_4).to eq(false) }
+    end
+  end
+
 end

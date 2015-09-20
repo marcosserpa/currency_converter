@@ -136,6 +136,29 @@ module Currency
       "#{ result } #{ currency }"
     end
 
+    def >(value)
+      if amount > value.amount
+        true
+      else
+        false
+      end
+    end
+
+    def <(value)
+      if amount < value.amount
+        true
+      else
+        false
+      end
+    end
+
+    def ==(value)
+      if (amount == value.amount) && (currency == value.currency)
+        true
+      else
+        false
+      end
+    end
   end
 
 end
