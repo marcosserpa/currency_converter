@@ -10,6 +10,7 @@ module Currency
 
     attr_accessor :amount, :currency
 
+
     class << self
 
       # class methods ===========
@@ -32,6 +33,7 @@ module Currency
 
     end
 
+
     # instance methods ===========
     def initialize(amount = 0, currency = @@base)
       @amount = amount
@@ -49,6 +51,91 @@ module Currency
     def inspect
       "#{ amount.to_f } #{ currency }"
     end
+
+    def +(value)
+      result = if value.is_a? Money
+        if value.currency == @@base
+          amount + value.amount
+        else
+          if (defined?(@@rates) == nil) || @@rates.empty? || !@@rates.include?(value.currency)
+            "Currency is not defined:"
+          else
+            amount + value.convert_to(value.currency)
+          end
+        end
+      else
+        amount + value
+      end
+
+      "#{ result } #{ currency }"
+    end
+
+    def -(value)
+      result = if value.is_a? Money
+        if value.currency == @@base
+          amount - value.amount
+        else
+          if (defined?(@@rates) == nil) || @@rates.empty? || !@@rates.include?(value.currency)
+            "Currency is not defined:"
+          else
+            amount - value.convert_to(value.currency)
+          end
+        end
+      else
+        amount - value
+      end
+
+      "#{ result } #{ currency }"
+    end
+
+    def *(value)
+      result = if value.is_a? Money
+        if value.currency == @@base
+          amount * value.amount
+        else
+          if (defined?(@@rates) == nil) || @@rates.empty? || !@@rates.include?(value.currency)
+            "Currency is not defined:"
+          else
+            amount * value.convert_to(value.currency)
+          end
+        end
+      else
+        amount * value
+      end
+
+      "#{ result } #{ currency }"
+    end
+
+    def /(value)
+      result = if value.is_a? Money
+        if value.currency == @@base
+          if (amount % value.amount).zero?
+            amount / value.amount
+          else
+            amount.to_f / value.amount
+          end
+        else
+          if (defined?(@@rates) == nil) || @@rates.empty? || !@@rates.include?(value.currency)
+            "Currency is not defined:"
+          else
+            if (amount % value.convert_to(value.currency)).zero?
+              amount / value.convert_to(value.currency)
+            else
+              amount.to_f / value.convert_to(value.currency)
+            end
+          end
+        end
+      else
+        if (amount % value).zero?
+          amount / value
+        else
+          amount.to_f / value
+        end
+      end
+
+      "#{ result } #{ currency }"
+    end
+
   end
 
 end

@@ -43,4 +43,65 @@ describe Currency do
       it { expect(money.inspect).to eq("10.0 BRL") }
     end
   end
+
+  # arithmetic and logic operations override
+  describe '#+' do
+    Currency::Money.conversion_rates('BRL')
+    let (:money) { Currency::Money.new(50, 'BRL') }
+
+    context "when passed a Money object" do
+      tip = Currency::Money.new(10, 'BRL')
+
+      it { expect(money + tip).to eq("60 BRL") }
+    end
+
+    context "when passed a number" do
+      it {  expect(money + 20).to eq("70 BRL") }
+    end
+  end
+
+  describe '#-' do
+    Currency::Money.conversion_rates('BRL')
+    let (:money) { Currency::Money.new(50, 'BRL') }
+
+    context "when passed a Money object" do
+      tip = Currency::Money.new(10, 'BRL')
+
+      it { expect(money - tip).to eq("40 BRL") }
+    end
+
+    context "when passed a number" do
+      it {  expect(money - 20).to eq("30 BRL") }
+    end
+  end
+
+  describe '#*' do
+    Currency::Money.conversion_rates('BRL')
+    let (:money) { Currency::Money.new(50, 'BRL') }
+
+    context "when passed a Money object" do
+      tip = Currency::Money.new(10, 'BRL')
+
+      it { expect(money * tip).to eq("500 BRL") }
+    end
+
+    context "when passed a number" do
+      it {  expect(money * 20).to eq("1000 BRL") }
+    end
+  end
+
+  describe '#/' do
+    Currency::Money.conversion_rates('BRL')
+    let (:money) { Currency::Money.new(50, 'BRL') }
+
+    context "when passed a Money object" do
+      tip = Currency::Money.new(10, 'BRL')
+
+      it { expect(money / tip).to eq("5 BRL") }
+    end
+
+    context "when passed a number" do
+      it {  expect(money / 20).to eq("2.5 BRL") }
+    end
+  end
 end
